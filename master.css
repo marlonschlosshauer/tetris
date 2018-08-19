@@ -1,0 +1,42 @@
+body {
+  background: black;
+  font-family: monospace;
+  font-size: 16px;
+}
+body section {
+  color: white;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+#playfield_section {
+  font-size: 7vh;
+  line-height: 65%;
+}
+
+.wall {
+  display: inline;
+  color: #4e6444;
+}
+
+.blocks {
+  display: inline;
+  color: #bee3aa;
+}
+
+.row {
+  display: block;
+}
+
+.full {
+  color: #bee3aa;
+}
+
+.empty {
+  color: #4e6444;
+}
+
+/*# sourceMappingURL=built/master.css.map */
