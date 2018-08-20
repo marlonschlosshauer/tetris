@@ -159,11 +159,9 @@ function update_hold_block_window()
 
 function update_hold_block_window_frame()
 {
+    var offset_x = item_padding * 2 * playfield.width + item_padding;
+    var offset_y = ((item_padding * 2 * playfield.width) + item_padding) - 50;
 
-    var offset_x = item_padding + (item_padding * 10);
-    var offset_y = (item_padding * 2 * playfield.width) + item_padding * 4;
-
-    temp_block = saved_block;
-    kit.brush.fillStyle = "black";
-    kit.brush.fillRect(offset_x,offset_y,(item_padding+2)*(current_block.size+2)*2,(item_padding+2)*(current_block.size+2)*2);
+    kit.brush.fillStyle = "#000000";
+    kit.brush.fillRect(offset_x,offset_y,(item_padding+2)*(current_block.size+2)*2,(item_padding+2)*(12));
 }

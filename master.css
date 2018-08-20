@@ -3,9 +3,6 @@ body {
   font-family: monospace;
   font-size: 16px;
 }
-body section {
-  color: white;
-}
 
 * {
   padding: 0;
@@ -18,27 +15,3 @@ body section {
   margin-left: 4px;
   line-height: 65%;
 }
-
-.wall {
-  display: inline;
-  color: #4e6444;
-}
-
-.blocks {
-  display: inline;
-  color: #bee3aa;
-}
-
-.row {
-  display: block;
-}
-
-.full {
-  color: #bee3aa;
-}
-
-.empty {
-  color: #4e6444;
-}
-
-/*# sourceMappingURL=built/master.css.map */
