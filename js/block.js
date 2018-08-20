@@ -179,7 +179,7 @@ function toggle_backup()
     {
         return;
     }
-
+    update_hold_block_window_frame();
     //Load from backup
     if(saved_block != 0)
     {
@@ -202,4 +202,7 @@ function toggle_backup()
     var field_size = get_correct_field_size(block_type);
 
     current_block = new Block(field_size,initialy,initialx,block_type,false,get_field(block_type, field_size));
+    update_hold_block_window();
+    update_next_block_window_frame();
+    update_next_block_window();
 }

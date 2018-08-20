@@ -2,7 +2,7 @@ function set_input_capture(bool)
 {
     if(bool)
     {
-        document.addEventListener('keydown',this.check_input);
+        document.addEventListener('keypress',this.check_input);
     }
     else
     {

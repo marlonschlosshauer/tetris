@@ -1,6 +1,6 @@
 function initialise_game_logic()
 {
-    return setInterval(lower_piece,500);
+    return setInterval(lower_piece,1200);
 }
 
 function save_current_blocks_to_playfield()
@@ -72,7 +72,7 @@ function generate_block_ids()
 
 function choose_next_block()
 {
-    if(blocks.length < 1)
+    if(blocks.length <= 0)
     {
         generate_block_ids();
     }
@@ -92,6 +92,8 @@ function locked()
     save_current_blocks_to_playfield();
     check_playfield_for_completed_line();
     current_block = generate_block(choose_next_block(),initialy,initialx);
+    update_next_block_window_frame();
+    update_next_block_window();
     //Check if game over
     if(check_game_over()) reset_game();
     update_visuals(playfield,current_block,kit);
