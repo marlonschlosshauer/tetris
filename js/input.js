@@ -64,13 +64,15 @@ function check_input(e)
     case "[":
         zoom++;
 
-        kit.canvas.style.height = visual_height;
-        kit.canvas.style.width = visual_width;
-        kit.canvas.height = visual_height;
-        kit.canvas.width = visual_width;
+        visual_height = block_size * zoom;
+        visual_height += block_border * zoom * 2;
+        visual_height *= field_height;
+        visual_height += block_border*zoom;
 
-        kit.brush.fillStyle = "#000000";
-        kit.brush.fillRect(0,0,visual_width,visual_height);
+        visual_width = ((block_size*zoom)+(block_border+zoom)) * (field_width + 10);
+        change_canvas_size(visual_height,visual_width);
+
+        kit.brush.clearRect(0,0,visual_width,visual_height);
         update_next_block_window();
 
         if(saved_block != 0)
@@ -85,17 +87,18 @@ function check_input(e)
         if(zoom > 1)
         {
             zoom--;
-
-
-            kit.brush.fillStyle = "#000000";
-            kit.brush.fillRect(0,0,visual_width,visual_height);
+            kit.brush.clearRect(0,0,visual_width,visual_height);
             update_next_block_window();
 
-            kit.canvas.height = visual_height;
-            kit.canvas.style.width = visual_width;
-            kit.canvas.height = visual_height;
-            kit.canvas.width = visual_width;
+            visual_height = block_size * zoom;
+            visual_height += block_border * zoom * 2;
+            visual_height *= field_height;
+            visual_height += block_border*zoom;
 
+            visual_width = ((block_size*zoom)+(block_border+zoom)) * (field_width + 10);
+
+            change_canvas_size(visual_height,visual_width);
+            update_next_block_window();
             if(saved_block != 0)
             {
                 update_hold_block_window();

@@ -195,6 +195,10 @@ function reset_game()
     generate_block_ids();
     current_block = generate_block(choose_next_block(),initialy,initialx);
     saved_block = 0;
+    update_next_block_window_frame();
+    update_next_block_window();
+    update_hold_block_window_frame();
+    update_hold_block_window();
     update_visuals(playfield, current_block, kit);
 }
 

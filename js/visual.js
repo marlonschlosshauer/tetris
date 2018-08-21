@@ -20,25 +20,25 @@ function initialise_visual_tools(temp_height, temp_width)
 function draw_block_full(temp_toolkit,temp_y,temp_x)
 {
     temp_toolkit.brush.fillStyle = color_block_full;
-    temp_toolkit.brush.fillRect(temp_x+(block_border*zoom),temp_y+(block_border*zoom),(block_size-block_border*2)*zoom,(block_size-block_border*2)*zoom);
+    temp_toolkit.brush.fillRect(temp_x+(block_border*zoom)+(block_border*zoom),temp_y+(block_border*zoom)+(block_border*zoom),(block_size-block_border*2)*zoom,(block_size-block_border*2)*zoom);
     temp_toolkit.brush.lineWidth = block_border*zoom;
     temp_toolkit.brush.strokeStyle = color_block_ghost;
-    temp_toolkit.brush.strokeRect(temp_x,temp_y,block_size*zoom,block_size*zoom);
+    temp_toolkit.brush.strokeRect(temp_x+(block_border*zoom),temp_y+(block_border*zoom),block_size*zoom,block_size*zoom);
 }
 
 function draw_block_empty(temp_toolkit,temp_y,temp_x)
 {
     temp_toolkit.brush.fillStyle = color_block_empty;
-    temp_toolkit.brush.fillRect(temp_x,temp_y,block_size*zoom,block_size*zoom);
+    temp_toolkit.brush.fillRect(temp_x+(block_border*zoom),temp_y+(block_border*zoom),block_size*zoom,block_size*zoom);
     temp_toolkit.brush.lineWidth = block_border*zoom;
     temp_toolkit.brush.strokeStyle = color_block_ghost;
-    temp_toolkit.brush.strokeRect(temp_x,temp_y,block_size*zoom,block_size*zoom);
+    temp_toolkit.brush.strokeRect(temp_x+(block_border*zoom),temp_y+(block_border*zoom),block_size*zoom,block_size*zoom);
 }
 
 function draw_block_ghost(temp_toolkit,temp_y,temp_x)
 {
     temp_toolkit.brush.fillStyle = color_block_ghost;
-    temp_toolkit.brush.fillRect(temp_x+(block_border*zoom),temp_y+(block_border*zoom),(block_size-block_border*2)*zoom,(block_size-block_border*2)*zoom);
+    temp_toolkit.brush.fillRect(temp_x+(block_border*zoom)+(block_border*zoom),temp_y+(block_border*zoom)+(block_border*zoom),(block_size-block_border*2)*zoom,(block_size-block_border*2)*zoom);
 }
 
 function update_visuals(temp_playfield, temp_block, temp_toolkit)
@@ -123,13 +123,13 @@ function update_next_block_window()
 
 function update_next_block_window_frame()
 {
-    var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2)) - block_border;
-    var offset_y = (block_size*zoom)+(block_border*zoom) - block_border;
+    var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2)) - (block_border*zoom);
+    var offset_y = (block_size*zoom)+(block_border*zoom) - (block_border*zoom);
 
     kit.brush.fillStyle = "#000000";
     kit.brush.fillRect(offset_x,offset_y,
-        (((block_size*zoom)+(block_border+zoom))*4)+(block_border*7),
-        (((block_size*zoom)+(block_border+zoom*2))*4)+(block_border*7));
+        (((block_size*zoom)+(block_border+zoom))*4)+(block_border*7*zoom),
+        (((block_size*zoom)+(block_border+zoom*2))*4)+(block_border*7*zoom));
 }
 
 function update_hold_block_window()
@@ -152,11 +152,19 @@ function update_hold_block_window()
 
 function update_hold_block_window_frame()
 {
-    var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2)) - block_border;
-    var offset_y = ((block_size*zoom)+(block_border*zoom))*8 - block_border;
+    var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2)) - (block_border*zoom);
+    var offset_y = ((block_size*zoom)+(block_border*zoom))*8 - (block_border*zoom);
 
     kit.brush.fillStyle = "#000000";
     kit.brush.fillRect(offset_x,offset_y,
-        (((block_size*zoom)+(block_border+zoom))*4)+(block_border*7),
-        (((block_size*zoom)+(block_border+zoom*2))*4)+(block_border*7));
+        (((block_size*zoom)+(block_border+zoom))*4)+(block_border*zoom*7),
+        (((block_size*zoom)+(block_border+zoom*2))*4)+(block_border*zoom*7));
+}
+
+function change_canvas_size(temp_height,temp_width)
+{
+    kit.canvas.style.height = visual_height;
+    kit.canvas.style.width = visual_width;
+    kit.canvas.height = visual_height;
+    kit.canvas.width = visual_width;
 }
