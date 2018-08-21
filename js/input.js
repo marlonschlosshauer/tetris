@@ -61,14 +61,48 @@ function check_input(e)
         update_visuals(playfield, current_block,kit);
     break;
 
-    case "+":
-        // zoom *= 2;
+    case "[":
+        zoom++;
+
+        kit.canvas.style.height = visual_height;
+        kit.canvas.style.width = visual_width;
+        kit.canvas.height = visual_height;
+        kit.canvas.width = visual_width;
+
+        kit.brush.fillStyle = "#000000";
+        kit.brush.fillRect(0,0,visual_width,visual_height);
+        update_next_block_window();
+
+        if(saved_block != 0)
+        {
+            update_hold_block_window();
+        }
+
         update_visuals(playfield,current_block,kit);
     break;
 
-    case "-":
-        // zoom = Math.floor(zoom/2);
-        update_visuals(playfield,current_block,kit);
+    case "]":
+        if(zoom > 1)
+        {
+            zoom--;
+
+
+            kit.brush.fillStyle = "#000000";
+            kit.brush.fillRect(0,0,visual_width,visual_height);
+            update_next_block_window();
+
+            kit.canvas.height = visual_height;
+            kit.canvas.style.width = visual_width;
+            kit.canvas.height = visual_height;
+            kit.canvas.width = visual_width;
+
+            if(saved_block != 0)
+            {
+                update_hold_block_window();
+            }
+
+            update_visuals(playfield,current_block,kit);
+        }
     break;
 
     case "Escape":

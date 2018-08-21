@@ -1,18 +1,16 @@
 var playfield;
 var field_width = 11;
-// field_width = 12;
 var field_height = 20;
 var field_total_height = 40;
 
-var kit;
-var visual_height = (16+10)*field_height;
-var visual_width = (16+10+4)*field_width;
-
-// var item_height = 16;
 var zoom = 1;
-var item_height = 16;
-var block_height = 16;
-var item_padding = 10;
+var block_border = 2;
+var block_padding = 4;
+var block_size = 16;
+
+var kit;
+var visual_height = ((block_size*zoom)+(block_border+zoom)) * (field_height+2)+block_border;
+var visual_width = ((block_size*zoom)+(block_border+zoom)) * (field_width + 10);
 
 var color_block_full = '#bfcd99';
 var color_block_empty = '#000000';
@@ -31,10 +29,8 @@ var logic_interval;
 
 function initialise_game()
 {
-
     playfield = new Playfield(field_total_height,field_height,field_width);
     reset_array(playfield.field, playfield.height, playfield.width);
-
     kit = initialise_visual_tools(visual_height, visual_width);
     current_block = generate_block(choose_next_block(),initialy,initialx);
     update_visuals(playfield, current_block, kit);
@@ -45,11 +41,12 @@ function initialise_game()
     set_input_capture(true);
 }
 
-//TODO: show next and show backup
+//TODO: remove 2px cutoff at left edge
+//TODO: hold window doesnt reset on game loss
+//TODO: canvas doesnt resize when this.canvas.height called
+
 //TODO: infinite move and rotate if blocked
 //TODO: speed up key repeat
 //TODO: line counter (and timer)
 //TODO: update collision to allow spins (no idea how)
-//TODO: visual upgrade (full blocks ?)
 //TODO: change from draw entire to just undraw
-//TODO: add own scaling (visual)

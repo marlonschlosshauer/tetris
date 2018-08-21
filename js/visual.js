@@ -20,31 +20,25 @@ function initialise_visual_tools(temp_height, temp_width)
 function draw_block_full(temp_toolkit,temp_y,temp_x)
 {
     temp_toolkit.brush.fillStyle = color_block_full;
-    temp_toolkit.brush.fillRect(temp_x+2,temp_y+2,12,12);
-    temp_toolkit.brush.lineWidth = 2;
+    temp_toolkit.brush.fillRect(temp_x+(block_border*zoom),temp_y+(block_border*zoom),(block_size-block_border*2)*zoom,(block_size-block_border*2)*zoom);
+    temp_toolkit.brush.lineWidth = block_border*zoom;
     temp_toolkit.brush.strokeStyle = color_block_ghost;
-    temp_toolkit.brush.strokeRect(temp_x,temp_y,16,16);
-}
-
-function draw_block_full_old(temp_toolkit,temp_y,temp_x)
-{
-    temp_toolkit.brush.fillStyle = color_block_full;
-    temp_toolkit.brush.fillRect(temp_x,temp_y,item_height,item_height);
+    temp_toolkit.brush.strokeRect(temp_x,temp_y,block_size*zoom,block_size*zoom);
 }
 
 function draw_block_empty(temp_toolkit,temp_y,temp_x)
 {
     temp_toolkit.brush.fillStyle = color_block_empty;
-    temp_toolkit.brush.fillRect(temp_x,temp_y,16,16);
-    temp_toolkit.brush.lineWidth = 2;
+    temp_toolkit.brush.fillRect(temp_x,temp_y,block_size*zoom,block_size*zoom);
+    temp_toolkit.brush.lineWidth = block_border*zoom;
     temp_toolkit.brush.strokeStyle = color_block_ghost;
-    temp_toolkit.brush.strokeRect(temp_x,temp_y,16,16);
+    temp_toolkit.brush.strokeRect(temp_x,temp_y,block_size*zoom,block_size*zoom);
 }
 
 function draw_block_ghost(temp_toolkit,temp_y,temp_x)
 {
     temp_toolkit.brush.fillStyle = color_block_ghost;
-    temp_toolkit.brush.fillRect(temp_x+2,temp_y+2,12,12);
+    temp_toolkit.brush.fillRect(temp_x+(block_border*zoom),temp_y+(block_border*zoom),(block_size-block_border*2)*zoom,(block_size-block_border*2)*zoom);
 }
 
 function update_visuals(temp_playfield, temp_block, temp_toolkit)
@@ -62,11 +56,11 @@ function print_playfield_to_canvas(temp_playfield, temp_toolkit)
         {
             if(temp_playfield.field[cany][canx])
             {
-                draw_block_full(temp_toolkit,((cany-initialy) * item_padding * zoom * 2),canx * item_padding * zoom * 2);
+                draw_block_full(temp_toolkit,(cany-initialy) * ((block_size*zoom)+(block_padding*zoom)),canx * ((block_size*zoom)+(block_padding*zoom)));
             }
             else
             {
-                draw_block_empty(temp_toolkit,((cany-initialy) * item_padding * 2),canx * item_padding * 2);
+                draw_block_empty(temp_toolkit,(cany-initialy) * ((block_size*zoom)+(block_padding*zoom)),canx * ((block_size*zoom)+(block_padding*zoom)));
             }
         }
     }
@@ -80,7 +74,7 @@ function print_currentblock_to_canvas(temp_current_block, temp_toolkit)
         {
             if(temp_current_block.field[y][x])
             {
-                draw_block_full(temp_toolkit,(y + (temp_current_block.positiony-initialy)) * item_padding * 1 * 2,(x + temp_current_block.positionx) * item_padding * 1 * 2);
+                draw_block_full(temp_toolkit,(y + (temp_current_block.positiony-initialy)) * ((block_size*zoom)+(block_padding*zoom)),(x+temp_current_block.positionx) * (((block_size*zoom)+(block_padding*zoom))));
             }
         }
     }
@@ -97,7 +91,7 @@ function print_ghost_to_canvas(temp_playfield, temp_toolkit)
         {
             if(temp_block.field[y][x])
             {
-                draw_block_ghost(temp_toolkit,(y +  (temp_block.positiony-initialy)) * item_padding*2,(x + temp_block.positionx) * item_padding * 1 * 2);
+                draw_block_ghost(temp_toolkit,(y + (temp_block.positiony-initialy)) * ((block_size*zoom)+(block_padding*zoom)),(x+temp_block.positionx) * (((block_size*zoom)+(block_padding*zoom))));
             }
         }
     }
@@ -105,10 +99,8 @@ function print_ghost_to_canvas(temp_playfield, temp_toolkit)
 
 function update_next_block_window()
 {
-    //FIX 'X' OFFSET
-    var offset_x = item_padding * 2;
-    var offset_y = (item_padding * 2 * playfield.width) + item_padding * 2;
-
+    var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2));
+    var offset_y = (block_size*zoom)+(block_border*zoom);
     var temp_block;
     if(blocks.length <= 0)
     {
@@ -123,7 +115,7 @@ function update_next_block_window()
         {
             if(temp_block[y][x])
             {
-                draw_block_full(kit,offset_x+(x*item_padding*2),offset_y+(y*item_padding*2));
+                draw_block_full(kit,offset_y+(((block_size*zoom)+(block_padding*zoom))*y),offset_x+(((block_size*zoom)+(block_padding*zoom))*x));
             }
         }
     }
@@ -131,18 +123,19 @@ function update_next_block_window()
 
 function update_next_block_window_frame()
 {
+    var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2)) - block_border;
+    var offset_y = (block_size*zoom)+(block_border*zoom) - block_border;
 
-    var offset_x = item_padding * 2 * playfield.width + item_padding;
-    var offset_y = item_padding;
     kit.brush.fillStyle = "#000000";
-    kit.brush.fillRect(offset_x,offset_y,(item_padding+2)*(current_block.size+2)*2,(item_padding+2)*(8));
+    kit.brush.fillRect(offset_x,offset_y,
+        (((block_size*zoom)+(block_border+zoom))*4)+(block_border*7),
+        (((block_size*zoom)+(block_border+zoom*2))*4)+(block_border*7));
 }
 
 function update_hold_block_window()
 {
-    var offset_x = item_padding * 2 * playfield.width + item_padding;
-    var offset_y = (item_padding * 2 * playfield.width) + item_padding * 2;
-
+    var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2));
+    var offset_y = ((block_size*zoom)+(block_border*zoom))*8;
     temp_block = saved_block;
 
     for(var y = 0 ; y < temp_block.size; y++)
@@ -151,7 +144,7 @@ function update_hold_block_window()
         {
             if(temp_block.field[y][x])
             {
-                draw_block_full(kit,offset_x+(x*item_padding*2),offset_y+(y*item_padding*2));
+                draw_block_full(kit,offset_y+(((block_size*zoom)+(block_padding*zoom))*y),offset_x+(((block_size*zoom)+(block_padding*zoom))*x));
             }
         }
     }
@@ -159,9 +152,11 @@ function update_hold_block_window()
 
 function update_hold_block_window_frame()
 {
-    var offset_x = item_padding * 2 * playfield.width + item_padding;
-    var offset_y = ((item_padding * 2 * playfield.width) + item_padding) - 50;
+    var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2)) - block_border;
+    var offset_y = ((block_size*zoom)+(block_border*zoom))*8 - block_border;
 
     kit.brush.fillStyle = "#000000";
-    kit.brush.fillRect(offset_x,offset_y,(item_padding+2)*(current_block.size+2)*2,(item_padding+2)*(12));
+    kit.brush.fillRect(offset_x,offset_y,
+        (((block_size*zoom)+(block_border+zoom))*4)+(block_border*7),
+        (((block_size*zoom)+(block_border+zoom*2))*4)+(block_border*7));
 }
