@@ -89,6 +89,7 @@ function generate_block(block_type, temp_position_y,temp_position_x)
 
 function locked()
 {
+
     save_current_blocks_to_playfield();
     check_playfield_for_completed_line();
     current_block = generate_block(choose_next_block(),initialy,initialx);
@@ -134,6 +135,7 @@ function check_playfield_for_completed_line()
     {
         if(check_line(playfield,y))
         {
+            line_count++;
             for(var x = 0 ; x < playfield.width; x++)
             {
                 playfield.field[y][x] = 0;

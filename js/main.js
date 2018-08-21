@@ -5,7 +5,6 @@ var field_total_height = 40;
 
 var zoom = 2;
 var block_border = 2;
-var block_padding = 4;
 var block_size = 16;
 
 var kit;
@@ -30,6 +29,8 @@ var saved_block = 0;
 
 var visual_interval;
 var logic_interval;
+
+var line_count = 0;
 
 function initialise_game()
 {

@@ -46,6 +46,7 @@ function update_visuals(temp_playfield, temp_block, temp_toolkit)
     print_playfield_to_canvas(temp_playfield,temp_toolkit);
     print_ghost_to_canvas(playfield,kit);
     print_currentblock_to_canvas(temp_block,temp_toolkit);
+    update_line_count();
 }
 
 function print_playfield_to_canvas(temp_playfield, temp_toolkit)
@@ -56,11 +57,11 @@ function print_playfield_to_canvas(temp_playfield, temp_toolkit)
         {
             if(temp_playfield.field[cany][canx])
             {
-                draw_block_full(temp_toolkit,(cany-initialy) * ((block_size*zoom)+(block_padding*zoom)),canx * ((block_size*zoom)+(block_padding*zoom)));
+                draw_block_full(temp_toolkit,(cany-initialy) * ((block_size*zoom)+(block_border*2*zoom)),canx * ((block_size*zoom)+(block_border*2*zoom)));
             }
             else
             {
-                draw_block_empty(temp_toolkit,(cany-initialy) * ((block_size*zoom)+(block_padding*zoom)),canx * ((block_size*zoom)+(block_padding*zoom)));
+                draw_block_empty(temp_toolkit,(cany-initialy) * ((block_size*zoom)+(block_border*2*zoom)),canx * ((block_size*zoom)+(block_border*2*zoom)));
             }
         }
     }
@@ -74,7 +75,7 @@ function print_currentblock_to_canvas(temp_current_block, temp_toolkit)
         {
             if(temp_current_block.field[y][x])
             {
-                draw_block_full(temp_toolkit,(y + (temp_current_block.positiony-initialy)) * ((block_size*zoom)+(block_padding*zoom)),(x+temp_current_block.positionx) * (((block_size*zoom)+(block_padding*zoom))));
+                draw_block_full(temp_toolkit,(y + (temp_current_block.positiony-initialy)) * ((block_size*zoom)+(block_border*2*zoom)),(x+temp_current_block.positionx) * (((block_size*zoom)+(block_border*2*zoom))));
             }
         }
     }
@@ -91,7 +92,7 @@ function print_ghost_to_canvas(temp_playfield, temp_toolkit)
         {
             if(temp_block.field[y][x])
             {
-                draw_block_ghost(temp_toolkit,(y + (temp_block.positiony-initialy)) * ((block_size*zoom)+(block_padding*zoom)),(x+temp_block.positionx) * (((block_size*zoom)+(block_padding*zoom))));
+                draw_block_ghost(temp_toolkit,(y + (temp_block.positiony-initialy)) * ((block_size*zoom)+(block_border*2*zoom)),(x+temp_block.positionx) * (((block_size*zoom)+(block_border*2*zoom))));
             }
         }
     }
@@ -115,7 +116,7 @@ function update_next_block_window()
         {
             if(temp_block[y][x])
             {
-                draw_block_full(kit,offset_y+(((block_size*zoom)+(block_padding*zoom))*y),offset_x+(((block_size*zoom)+(block_padding*zoom))*x));
+                draw_block_full(kit,offset_y+(((block_size*zoom)+(block_border*2*zoom))*y),offset_x+(((block_size*zoom)+(block_border*2*zoom))*x));
             }
         }
     }
@@ -126,8 +127,7 @@ function update_next_block_window_frame()
     var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2)) - (block_border*zoom);
     var offset_y = (block_size*zoom)+(block_border*zoom) - (block_border*zoom);
 
-    kit.brush.fillStyle = "#000000";
-    kit.brush.fillRect(offset_x,offset_y,
+    kit.brush.clearRect(offset_x,offset_y,
         (((block_size*zoom)+(block_border+zoom))*4)+(block_border*7*zoom),
         (((block_size*zoom)+(block_border+zoom*2))*4)+(block_border*7*zoom));
 }
@@ -144,7 +144,7 @@ function update_hold_block_window()
         {
             if(temp_block.field[y][x])
             {
-                draw_block_full(kit,offset_y+(((block_size*zoom)+(block_padding*zoom))*y),offset_x+(((block_size*zoom)+(block_padding*zoom))*x));
+                draw_block_full(kit,offset_y+(((block_size*zoom)+(block_border*2*zoom))*y),offset_x+(((block_size*zoom)+(block_border*2*zoom))*x));
             }
         }
     }
@@ -155,8 +155,7 @@ function update_hold_block_window_frame()
     var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2)) - (block_border*zoom);
     var offset_y = ((block_size*zoom)+(block_border*zoom))*8 - (block_border*zoom);
 
-    kit.brush.fillStyle = "#000000";
-    kit.brush.fillRect(offset_x,offset_y,
+    kit.brush.clearRect(offset_x,offset_y,
         (((block_size*zoom)+(block_border+zoom))*4)+(block_border*zoom*7),
         (((block_size*zoom)+(block_border+zoom*2))*4)+(block_border*zoom*7));
 }
@@ -167,4 +166,20 @@ function change_canvas_size(temp_height,temp_width)
     kit.canvas.style.width = visual_width;
     kit.canvas.height = visual_height;
     kit.canvas.width = visual_width;
+}
+
+function update_line_count()
+{
+    return;
+    var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2)) - (block_border*zoom);
+    var offset_y = ((block_size*zoom)+(block_border*zoom))*16 - (block_border*zoom);
+
+    var font_size = Math.pow(2,zoom);
+    font_size *= 20;
+    var string = font_size + "px monospace";
+
+    kit.brush.clearRect(offset_x,offset_y-font_size,offset_x,offset_y);
+    kit.brush.font = string;
+    kit.brush.fillStyle = color_block_full;
+    kit.brush.fillText(line_count+" ",offset_x,offset_y);
 }
