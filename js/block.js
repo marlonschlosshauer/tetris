@@ -171,6 +171,15 @@ function is_rotateable_xd(temp_block)
 
 function toggle_backup()
 {
+    //Doesn't save after loading.
+
+    //If nothing is saved, put curr into saved
+    //generate new block and put into temp
+
+    //Load curr into temp
+    //Load saved into curr
+    //Load temp into saved
+
     //Save current block id
     //Generate new block with id that is != current
     //Set backup flag to false
@@ -179,29 +188,27 @@ function toggle_backup()
     {
         return;
     }
-    update_hold_block_window_frame();
-    //Load from backup
-    if(saved_block != 0)
+
+    //Save current_block into temp
+    var temp = current_block;
+
+    if(saved_block == 0)
     {
-        current_block.positionx = initialx;
-        current_block.positiony = initialy;
-        current_block = saved_block;
-        current_block.saveable = false;
-        saved_block = 0;
-        return;
+        //No backup has been made yet
+        //need to make sure the same type can't gotten twice
+        var block_type = choose_next_block();
+        var field_size = get_correct_field_size(block_type);
+
+        saved_block = new Block(field_size,initialy,initialx,block_type,false,get_field(block_type, field_size));
     }
 
-    //Save into backup
+    current_block = saved_block;
     current_block.positionx = initialx;
     current_block.positiony = initialy;
+    current_block.saveable = false;
+    saved_block = temp;
 
-    saved_block = current_block;
-
-    //need to make sure the same type can't gotten twice
-    var block_type = choose_next_block();
-    var field_size = get_correct_field_size(block_type);
-
-    current_block = new Block(field_size,initialy,initialx,block_type,false,get_field(block_type, field_size));
+    update_hold_block_window_frame();
     update_hold_block_window();
     update_next_block_window_frame();
     update_next_block_window();
