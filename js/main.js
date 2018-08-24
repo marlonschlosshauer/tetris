@@ -39,14 +39,15 @@ function initialise_game()
     kit = initialise_visual_tools(visual_height, visual_width);
     current_block = generate_block(choose_next_block(),initialy,initialx);
     update_visuals(playfield, current_block, kit);
-    update_next_block_window_frame();
-    update_next_block_window();
+    kit.update_next_block_window_frame(playfield);
+    kit.update_next_block_window(playfield);
 
     logic_interval = initialise_game_logic();
     set_input_capture(true);
 }
 
-//TODO: line counter (and timer)
+//TODO: line counter (and timer) change font to hellovetica
+//TODO: change block to object based
 
 //TODO: infinite move and rotate if blocked
 //TODO: speed up key repeat

@@ -3,8 +3,15 @@ function initialise_game_logic()
     return setInterval(lower_piece,1200);
 }
 
+function initialise_visual_tools(temp_height, temp_width)
+{
+    var temp_canvas = document.getElementById('playfield_section');
+    return new Toolkit(temp_canvas,temp_canvas.getContext('2d'),temp_height,temp_width);
+}
+
 function save_current_blocks_to_playfield()
 {
+    //TODO: current_block and playfield
     for(var cany = 0 ; cany < current_block.size; cany++)
     {
         for(var canx = 0 ; canx < current_block.size ; canx++)
@@ -89,12 +96,12 @@ function generate_block(block_type, temp_position_y,temp_position_x)
 
 function locked()
 {
-
+    //TODO: kit, playfield current_block
     save_current_blocks_to_playfield();
     check_playfield_for_completed_line();
     current_block = generate_block(choose_next_block(),initialy,initialx);
-    update_next_block_window_frame();
-    update_next_block_window();
+    kit.update_next_block_window_frame(playfield);
+    kit.update_next_block_window(playfield);
     //Check if game over
     if(check_game_over()) reset_game();
     update_visuals(playfield,current_block,kit);
@@ -114,14 +121,15 @@ function check_game_over()
 
 function lower_piece()
 {
+    //TODO: current_block
     //move
     //check if locked
-    if(at_bottom(current_block) || current_block.blocked)
+    if(current_block.at_bottom() || current_block.blocked)
     {
         locked();
     }
 
-    if(move(current_block,1,0) == 2)
+    if(current_block.move(1,0) == 2)
     {
         current_block.blocked = true;
     }
@@ -197,13 +205,12 @@ function reset_game()
     generate_block_ids();
     current_block = generate_block(choose_next_block(),initialy,initialx);
     saved_block = 0;
-    update_next_block_window_frame();
-    update_next_block_window();
-    update_hold_block_window_frame();
-    update_hold_block_window();
+    kit.update_next_block_window_frame(playfield);
+    kit.update_next_block_window(playfield);
+    kit.update_hold_block_window_frame(playfield);
+    kit.update_hold_block_window(playfield, saved_block);
     update_visuals(playfield, current_block, kit);
 }
-
 
 function overwrite_array_dimensions(temp_target_array, old_x, old_y)
 {
@@ -215,4 +222,21 @@ function overwrite_array_dimensions(temp_target_array, old_x, old_y)
     }
 
     reset_array(temp_target_array,old_y,old_x);
+}
+
+function update_visuals(temp_playfield, temp_block, temp_toolkit)
+{
+    temp_toolkit.print_playfield_to_canvas(temp_playfield);
+    temp_toolkit.print_ghost_to_canvas(temp_playfield,temp_block);
+    temp_toolkit.print_currentblock_to_canvas(temp_block);
+    temp_toolkit.update_line_count();
+}
+
+function change_canvas_size(temp_height,temp_width)
+{
+    //TODO kit
+    kit.canvas.style.height = visual_height;
+    kit.canvas.style.width = visual_width;
+    kit.canvas.height = visual_height;
+    kit.canvas.width = visual_width;
 }

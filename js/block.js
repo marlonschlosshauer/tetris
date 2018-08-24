@@ -9,21 +9,20 @@ function Block(size,y,x,type,save,field)
     this.blocked = false;
 }
 
-function move(temp_block,movementy, movementx)
+Block.prototype.move = function (y,x)
 {
     //We can only move if there is no block in our way
-    var coll = collided(temp_block,movementy,movementx);
+    var coll = this.collided(y,x);
     if(coll == 0)
     {
         //The actual moving part
-        temp_block.positiony += movementy;
-        temp_block.positionx += movementx;
+        this.positiony += y;
+        this.positionx += x;
     }
 
     return coll;
-}
-
-function rotate_block()
+};
+Block.prototype.rotate_block = function ()
 {
     //Make next blocks
     //Check if anything is out of bounds
@@ -34,7 +33,7 @@ function rotate_block()
     //else break
 
     //Choose next block
-    var next_type = current_block.type;
+    var next_type = this.type;
     next_type *= 10;
 
     if(Math.floor(next_type / 10000) > 0)
@@ -43,48 +42,54 @@ function rotate_block()
     }
 
     //Create next block
-    temp_block = generate_block(next_type,current_block.positiony,current_block.positionx);
+    temp_block = generate_block(next_type,this.positiony,this.positionx);
 
     var direction = 1;
     var max_mov = 2;
     if(temp_block.positionx > playfield.width / 2) direction = -1;
 
     //If collided, don't change block
-    if(collided(temp_block,0,0))
+    if(temp_block.collided(0,0))
     {
         return;
     }
 
-    current_block = temp_block;
-}
+    this.size = temp_block.size;
+    this.type = temp_block.type;
+    this.positiony = temp_block.positiony;
+    this.positionx = temp_block.positionx;
+    this.saveable = temp_block.saveable;
+    this.field = temp_block.field;
+    this.blocked = temp_block.blocked;
+};
 
-function drop(temp_block)
+Block.prototype.drop = function ()
 {
-    while(!at_bottom(temp_block) && !move(temp_block,1,0)){}
-}
+    while(!this.at_bottom() && !this.move(1,0)){}
+};
 
-function at_bottom(temp_block)
+Block.prototype.at_bottom = function ()
 {
-    //Is at line 19 ?
-    if(temp_block.positiony + temp_block.size >= playfield.height - 1)
+    //Is at line the end of the field (19) ?
+    if(this.positiony + this.size >= playfield.height - 1)
     {
 
     //Find which line in field of temp_block is the last
     var targety = 0;
-    while(targety + temp_block.positiony < playfield.height - 1)
+    while(targety + this.positiony < playfield.height - 1)
     {
         targety++;
     }
 
     //Savety check : No out of bounds on temp_block.field
-    if(targety >= temp_block.size)
+    if(targety >= this.size)
     {
         return false;
     }
         //Check if it's not an empty line
-        for(var x = 0; x < temp_block.size; x++)
+        for(var x = 0; x < this.size; x++)
         {
-            if(temp_block.field[targety][x])
+            if(this.field[targety][x])
             {
                 return true;
             }
@@ -92,38 +97,37 @@ function at_bottom(temp_block)
     }
 
     return false;
-}
+};
 
-function collided(temp_block,movementy, movementx)
-{
-    for(var tempy = 0 ; tempy < temp_block.size; tempy++)
+Block.prototype.collided = function (y,x) {
+    for(var tempy = 0 ; tempy < this.size; tempy++)
     {
-        for(var tempx = 0; tempx < temp_block.size; tempx++)
+        for(var tempx = 0; tempx < this.size; tempx++)
         {
-            if(temp_block.field[tempy][tempx] == 1)
+            if(this.field[tempy][tempx] == 1)
             {
                 //Make sure we don't move out of bounds
-                while(temp_block.positionx+tempx+movementx >= playfield.width)
+                while(this.positionx+tempx+x >= playfield.width)
                 {
-                    temp_block.positionx--;
+                    this.positionx--;
                 }
 
-                while(temp_block.positionx+tempx+movementx < 0)
+                while(this.positionx+tempx+x < 0)
                 {
-                    temp_block.positionx++;
+                    this.positionx++;
                 }
 
-                while(temp_block.positiony+tempy+movementy < 0)
+                while(this.positiony+tempy+y < 0)
                 {
-                    temp_block.positiony++;
+                    this.positiony++;
                 }
 
                 //Blocked
-                if(temp_block.positiony + tempy + movementy > 39)
+                if(this.positiony + tempy + y > playfield.height - 1)
                 {
                     return 1;
                 }
-                if(playfield.field[temp_block.positiony+tempy+movementy][temp_block.positionx+tempx+movementx])
+                if(playfield.field[this.positiony+tempy+y][this.positionx+tempx+x])
                 {
                     return 2;
                 }
@@ -132,65 +136,24 @@ function collided(temp_block,movementy, movementx)
     }
 
     return 0;
-}
+};
 
-function is_rotateable_xd(temp_block)
+Block.prototype.toggle_backup = function ()
 {
-    //Make sure we don't hit any walls
-    //Check if we're blocked
-    //If we are, look if move by 2 on x fixes
-    //else return false
-
-    correct_possible_wall_collision(temp_block,0,0);
-
-    var available_x_movement = 2;
-    //Move right by default
-    var movement_direction = 1;
-
-    if(temp_block.postionx > playfield.width / 2)
-    {
-        movement_direction = -1;
-    }
-
-    //Try resolving block
-    while(available_x_movement > 0 && collided_block(temp_block,0,0))
-    {
-        if(available_x_movement > 0)
-        {
-            temp_block.positionx += movement_direction;
-            available_x_movement--;
-        }
-    }
-
-    if(available_x_movement > 0)
-    {
-        return true;
-    }
-    return false;
-}
-
-function toggle_backup()
-{
-    //Doesn't save after loading.
-
     //If nothing is saved, put curr into saved
     //generate new block and put into temp
 
-    //Load curr into temp
-    //Load saved into curr
-    //Load temp into saved
-
-    //Save current block id
-    //Generate new block with id that is != current
-    //Set backup flag to false
-
-    if(!current_block.saveable)
+    if(!this.saveable)
     {
         return;
     }
 
     //Save current_block into temp
-    var temp = current_block;
+    var temp = this;
+
+    //Load curr into temp
+    //Load saved into curr
+    //Load temp into saved
 
     if(saved_block == 0)
     {
@@ -202,14 +165,12 @@ function toggle_backup()
         saved_block = new Block(field_size,initialy,initialx,block_type,false,get_field(block_type, field_size));
     }
 
-    current_block = saved_block;
-    current_block.positionx = initialx;
-    current_block.positiony = initialy;
-    current_block.saveable = false;
+    this.size = saved_block.size;
+    this.type = saved_block.type;
+    this.field = saved_block.field;
+    this.blocked = saved_block.blocked;
+    this.positionx = initialx;
+    this.positiony = initialy;
+    this.saveable = false;
     saved_block = temp;
-
-    update_hold_block_window_frame();
-    update_hold_block_window();
-    update_next_block_window_frame();
-    update_next_block_window();
-}
+};

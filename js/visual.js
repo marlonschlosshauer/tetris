@@ -11,63 +11,54 @@ function Toolkit(temp_canvas, temp_brush, temp_height, temp_width)
     this.canvas.width = temp_width;
 }
 
-function initialise_visual_tools(temp_height, temp_width)
-{
-    var temp_canvas = document.getElementById('playfield_section');
-    return new Toolkit(temp_canvas,temp_canvas.getContext('2d'),temp_height,temp_width);
+Toolkit.prototype.draw_block_full = function (y,x) {
+
+    this.brush.fillStyle = color_block_full;
+    this.brush.fillRect(    x+(block_border*zoom)+(block_border*zoom),
+                            y+(block_border*zoom)+(block_border*zoom),
+                            (block_size-block_border*2)*zoom,
+                            (block_size-block_border*2)*zoom);
+    this.brush.lineWidth = block_border*zoom;
+    this.brush.strokeStyle = color_block_ghost;
+    this.brush.strokeRect(  x+(block_border*zoom),
+                            y+(block_border*zoom),
+                            block_size*zoom,
+                            block_size*zoom);
+};
+
+Toolkit.prototype.draw_block_empty = function (y,x) {
+    this.brush.fillStyle = color_block_empty;
+    this.brush.fillRect(x+(block_border*zoom),y+(block_border*zoom),block_size*zoom,block_size*zoom);
+    this.brush.lineWidth = block_border*zoom;
+    this.brush.strokeStyle = color_block_ghost;
+    this.brush.strokeRect(x+(block_border*zoom),y+(block_border*zoom),block_size*zoom,block_size*zoom);
 }
 
-function draw_block_full(temp_toolkit,temp_y,temp_x)
+Toolkit.prototype.draw_block_ghost = function (y,x)
 {
-    temp_toolkit.brush.fillStyle = color_block_full;
-    temp_toolkit.brush.fillRect(temp_x+(block_border*zoom)+(block_border*zoom),temp_y+(block_border*zoom)+(block_border*zoom),(block_size-block_border*2)*zoom,(block_size-block_border*2)*zoom);
-    temp_toolkit.brush.lineWidth = block_border*zoom;
-    temp_toolkit.brush.strokeStyle = color_block_ghost;
-    temp_toolkit.brush.strokeRect(temp_x+(block_border*zoom),temp_y+(block_border*zoom),block_size*zoom,block_size*zoom);
+    this.brush.fillStyle = color_block_ghost;
+    this.brush.fillRect(x+(block_border*zoom)+(block_border*zoom),y+(block_border*zoom)+(block_border*zoom),(block_size-block_border*2)*zoom,(block_size-block_border*2)*zoom);
 }
 
-function draw_block_empty(temp_toolkit,temp_y,temp_x)
+Toolkit.prototype.print_playfield_to_canvas = function (temp_playfield)
 {
-    temp_toolkit.brush.fillStyle = color_block_empty;
-    temp_toolkit.brush.fillRect(temp_x+(block_border*zoom),temp_y+(block_border*zoom),block_size*zoom,block_size*zoom);
-    temp_toolkit.brush.lineWidth = block_border*zoom;
-    temp_toolkit.brush.strokeStyle = color_block_ghost;
-    temp_toolkit.brush.strokeRect(temp_x+(block_border*zoom),temp_y+(block_border*zoom),block_size*zoom,block_size*zoom);
-}
-
-function draw_block_ghost(temp_toolkit,temp_y,temp_x)
-{
-    temp_toolkit.brush.fillStyle = color_block_ghost;
-    temp_toolkit.brush.fillRect(temp_x+(block_border*zoom)+(block_border*zoom),temp_y+(block_border*zoom)+(block_border*zoom),(block_size-block_border*2)*zoom,(block_size-block_border*2)*zoom);
-}
-
-function update_visuals(temp_playfield, temp_block, temp_toolkit)
-{
-    print_playfield_to_canvas(temp_playfield,temp_toolkit);
-    print_ghost_to_canvas(playfield,kit);
-    print_currentblock_to_canvas(temp_block,temp_toolkit);
-    update_line_count();
-}
-
-function print_playfield_to_canvas(temp_playfield, temp_toolkit)
-{
-    for(var cany = initialy ; cany < temp_playfield.height; cany++)
+    for(var y = initialy ; y < temp_playfield.height; y++)
     {
-        for(var canx = 0 ; canx < temp_playfield.width; canx++)
+        for(var x = 0 ; x < temp_playfield.width; x++)
         {
-            if(temp_playfield.field[cany][canx])
+            if(temp_playfield.field[y][x])
             {
-                draw_block_full(temp_toolkit,(cany-initialy) * ((block_size*zoom)+(block_border*2*zoom)),canx * ((block_size*zoom)+(block_border*2*zoom)));
+                this.draw_block_full((y-initialy) * ((block_size*zoom)+(block_border*2*zoom)),x * ((block_size*zoom)+(block_border*2*zoom)));
             }
             else
             {
-                draw_block_empty(temp_toolkit,(cany-initialy) * ((block_size*zoom)+(block_border*2*zoom)),canx * ((block_size*zoom)+(block_border*2*zoom)));
+                this.draw_block_empty((y-initialy) * ((block_size*zoom)+(block_border*2*zoom)),x * ((block_size*zoom)+(block_border*2*zoom)));
             }
         }
     }
-}
+};
 
-function print_currentblock_to_canvas(temp_current_block, temp_toolkit)
+Toolkit.prototype.print_currentblock_to_canvas = function (temp_current_block)
 {
     for(var y = 0 ; y < temp_current_block.size; y++)
     {
@@ -75,16 +66,17 @@ function print_currentblock_to_canvas(temp_current_block, temp_toolkit)
         {
             if(temp_current_block.field[y][x])
             {
-                draw_block_full(temp_toolkit,(y + (temp_current_block.positiony-initialy)) * ((block_size*zoom)+(block_border*2*zoom)),(x+temp_current_block.positionx) * (((block_size*zoom)+(block_border*2*zoom))));
+                this.draw_block_full((y + (temp_current_block.positiony-initialy)) * ((block_size*zoom)+(block_border*2*zoom)),(x+temp_current_block.positionx) * (((block_size*zoom)+(block_border*2*zoom))));
             }
         }
     }
-}
+};
 
-function print_ghost_to_canvas(temp_playfield, temp_toolkit)
+
+Toolkit.prototype.print_ghost_to_canvas = function (temp_playfield, temp_block)
 {
-    var temp_block = generate_block(current_block.type,current_block.positiony,current_block.positionx);
-    drop(temp_block);
+    temp_block = generate_block(temp_block.type,temp_block.positiony,temp_block.positionx);
+    temp_block.drop();
 
     for(var y = 0 ; y < temp_block.size; y++)
     {
@@ -92,13 +84,13 @@ function print_ghost_to_canvas(temp_playfield, temp_toolkit)
         {
             if(temp_block.field[y][x])
             {
-                draw_block_ghost(temp_toolkit,(y + (temp_block.positiony-initialy)) * ((block_size*zoom)+(block_border*2*zoom)),(x+temp_block.positionx) * (((block_size*zoom)+(block_border*2*zoom))));
+                this.draw_block_ghost((y + (temp_block.positiony-initialy)) * ((block_size*zoom)+(block_border*2*zoom)),(x+temp_block.positionx) * (((block_size*zoom)+(block_border*2*zoom))));
             }
         }
     }
-}
+};
 
-function update_next_block_window()
+Toolkit.prototype.update_next_block_window = function ()
 {
     var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2));
     var offset_y = (block_size*zoom)+(block_border*zoom);
@@ -116,70 +108,50 @@ function update_next_block_window()
         {
             if(temp_block[y][x])
             {
-                draw_block_full(kit,offset_y+(((block_size*zoom)+(block_border*2*zoom))*y),offset_x+(((block_size*zoom)+(block_border*2*zoom))*x));
+                this.draw_block_full(offset_y+(((block_size*zoom)+(block_border*2*zoom))*y),offset_x+(((block_size*zoom)+(block_border*2*zoom))*x));
             }
         }
     }
 }
 
-function update_next_block_window_frame()
+Toolkit.prototype.update_next_block_window_frame = function (temp_playfield)
 {
-    var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2)) - (block_border*zoom);
+    var offset_x = (((block_size*zoom)+(block_border*zoom))*(temp_playfield.width+2)) - (block_border*zoom);
     var offset_y = (block_size*zoom)+(block_border*zoom) - (block_border*zoom);
 
-    kit.brush.clearRect(offset_x,offset_y,
+    this.brush.clearRect(offset_x,offset_y,
         (((block_size*zoom)+(block_border+zoom))*4)+(block_border*7*zoom),
         (((block_size*zoom)+(block_border+zoom*2))*4)+(block_border*7*zoom));
 }
 
-function update_hold_block_window()
+Toolkit.prototype.update_hold_block_window = function (temp_playfield,temp_saved)
 {
-    var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2));
+    var offset_x = (((block_size*zoom)+(block_border*zoom))*(temp_playfield.width+2));
     var offset_y = ((block_size*zoom)+(block_border*zoom))*8;
-    temp_block = saved_block;
 
-    for(var y = 0 ; y < temp_block.size; y++)
+    for(var y = 0 ; y < temp_saved.size; y++)
     {
-        for(var x = 0 ; x < temp_block.size; x++)
+        for(var x = 0 ; x < temp_saved.size; x++)
         {
-            if(temp_block.field[y][x])
+            if(saved_block.field[y][x])
             {
-                draw_block_full(kit,offset_y+(((block_size*zoom)+(block_border*2*zoom))*y),offset_x+(((block_size*zoom)+(block_border*2*zoom))*x));
+                this.draw_block_full(offset_y+(((block_size*zoom)+(block_border*2*zoom))*y),offset_x+(((block_size*zoom)+(block_border*2*zoom))*x));
             }
         }
     }
 }
 
-function update_hold_block_window_frame()
+Toolkit.prototype.update_hold_block_window_frame = function (temp_playfield)
 {
-    var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2)) - (block_border*zoom);
+    var offset_x = (((block_size*zoom)+(block_border*zoom))*(temp_playfield.width+2)) - (block_border*zoom);
     var offset_y = ((block_size*zoom)+(block_border*zoom))*8 - (block_border*zoom);
 
-    kit.brush.clearRect(offset_x,offset_y,
+    this.brush.clearRect(offset_x,offset_y,
         (((block_size*zoom)+(block_border+zoom))*4)+(block_border*zoom*7),
         (((block_size*zoom)+(block_border+zoom*2))*4)+(block_border*zoom*7));
 }
 
-function change_canvas_size(temp_height,temp_width)
+Toolkit.prototype.update_line_count = function ()
 {
-    kit.canvas.style.height = visual_height;
-    kit.canvas.style.width = visual_width;
-    kit.canvas.height = visual_height;
-    kit.canvas.width = visual_width;
-}
-
-function update_line_count()
-{
-    return;
-    var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2)) - (block_border*zoom);
-    var offset_y = ((block_size*zoom)+(block_border*zoom))*16 - (block_border*zoom);
-
-    var font_size = Math.pow(2,zoom);
-    font_size *= 20;
-    var string = font_size + "px monospace";
-
-    kit.brush.clearRect(offset_x,offset_y-font_size,offset_x,offset_y);
-    kit.brush.font = string;
-    kit.brush.fillStyle = color_block_full;
-    kit.brush.fillText(line_count+" ",offset_x,offset_y);
+    document.title = "Tetris : ["+line_count+"]";
 }
