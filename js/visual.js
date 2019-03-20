@@ -13,46 +13,46 @@ function Toolkit(temp_canvas, temp_brush, temp_height, temp_width)
 
 Toolkit.prototype.draw_block_full = function (y,x) {
 
-    this.brush.fillStyle = color_block_full;
-    this.brush.fillRect(    x+(block_border*zoom)+(block_border*zoom),
-                            y+(block_border*zoom)+(block_border*zoom),
-                            (block_size-block_border*2)*zoom,
-                            (block_size-block_border*2)*zoom);
-    this.brush.lineWidth = block_border*zoom;
-    this.brush.strokeStyle = color_block_ghost;
-    this.brush.strokeRect(  x+(block_border*zoom),
-                            y+(block_border*zoom),
-                            block_size*zoom,
-                            block_size*zoom);
+    this.brush.fillStyle = BLOCK_COLOR_FULL;
+    this.brush.fillRect(    x+(BLOCK_BORDER*ZOOM)+(BLOCK_BORDER*ZOOM),
+                            y+(BLOCK_BORDER*ZOOM)+(BLOCK_BORDER*ZOOM),
+                            (BLOCK_SIZE-BLOCK_BORDER*2)*ZOOM,
+                            (BLOCK_SIZE-BLOCK_BORDER*2)*ZOOM);
+    this.brush.lineWidth = BLOCK_BORDER*ZOOM;
+    this.brush.strokeStyle = BLOCK_COLOR_GHOST;
+    this.brush.strokeRect(  x+(BLOCK_BORDER*ZOOM),
+                            y+(BLOCK_BORDER*ZOOM),
+                            BLOCK_SIZE*ZOOM,
+                            BLOCK_SIZE*ZOOM);
 };
 
 Toolkit.prototype.draw_block_empty = function (y,x) {
-    this.brush.fillStyle = color_block_empty;
-    this.brush.fillRect(x+(block_border*zoom),y+(block_border*zoom),block_size*zoom,block_size*zoom);
-    this.brush.lineWidth = block_border*zoom;
-    this.brush.strokeStyle = color_block_ghost;
-    this.brush.strokeRect(x+(block_border*zoom),y+(block_border*zoom),block_size*zoom,block_size*zoom);
+    this.brush.fillStyle = BLOCK_COLOR_EMPTY;
+    this.brush.fillRect(x+(BLOCK_BORDER*ZOOM),y+(BLOCK_BORDER*ZOOM),BLOCK_SIZE*ZOOM,BLOCK_SIZE*ZOOM);
+    this.brush.lineWidth = BLOCK_BORDER*ZOOM;
+    this.brush.strokeStyle = BLOCK_COLOR_GHOST;
+    this.brush.strokeRect(x+(BLOCK_BORDER*ZOOM),y+(BLOCK_BORDER*ZOOM),BLOCK_SIZE*ZOOM,BLOCK_SIZE*ZOOM);
 }
 
 Toolkit.prototype.draw_block_ghost = function (y,x)
 {
-    this.brush.fillStyle = color_block_ghost;
-    this.brush.fillRect(x+(block_border*zoom)+(block_border*zoom),y+(block_border*zoom)+(block_border*zoom),(block_size-block_border*2)*zoom,(block_size-block_border*2)*zoom);
+    this.brush.fillStyle = BLOCK_COLOR_GHOST;
+    this.brush.fillRect(x+(BLOCK_BORDER*ZOOM)+(BLOCK_BORDER*ZOOM),y+(BLOCK_BORDER*ZOOM)+(BLOCK_BORDER*ZOOM),(BLOCK_SIZE-BLOCK_BORDER*2)*ZOOM,(BLOCK_SIZE-BLOCK_BORDER*2)*ZOOM);
 }
 
 Toolkit.prototype.print_playfield_to_canvas = function (temp_playfield)
 {
-    for(var y = initialy ; y < temp_playfield.height; y++)
+    for(var y = INITIALY ; y < temp_playfield.height; y++)
     {
         for(var x = 0 ; x < temp_playfield.width; x++)
         {
             if(temp_playfield.field[y][x])
             {
-                this.draw_block_full((y-initialy) * ((block_size*zoom)+(block_border*2*zoom)),x * ((block_size*zoom)+(block_border*2*zoom)));
+                this.draw_block_full((y-INITIALY) * ((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*2*ZOOM)),x * ((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*2*ZOOM)));
             }
             else
             {
-                this.draw_block_empty((y-initialy) * ((block_size*zoom)+(block_border*2*zoom)),x * ((block_size*zoom)+(block_border*2*zoom)));
+                this.draw_block_empty((y-INITIALY) * ((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*2*ZOOM)),x * ((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*2*ZOOM)));
             }
         }
     }
@@ -66,7 +66,7 @@ Toolkit.prototype.print_currentblock_to_canvas = function (temp_current_block)
         {
             if(temp_current_block.field[y][x])
             {
-                this.draw_block_full((y + (temp_current_block.positiony-initialy)) * ((block_size*zoom)+(block_border*2*zoom)),(x+temp_current_block.positionx) * (((block_size*zoom)+(block_border*2*zoom))));
+                this.draw_block_full((y + (temp_current_block.positiony-INITIALY)) * ((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*2*ZOOM)),(x+temp_current_block.positionx) * (((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*2*ZOOM))));
             }
         }
     }
@@ -84,7 +84,7 @@ Toolkit.prototype.print_ghost_to_canvas = function (temp_playfield, temp_block)
         {
             if(temp_block.field[y][x])
             {
-                this.draw_block_ghost((y + (temp_block.positiony-initialy)) * ((block_size*zoom)+(block_border*2*zoom)),(x+temp_block.positionx) * (((block_size*zoom)+(block_border*2*zoom))));
+                this.draw_block_ghost((y + (temp_block.positiony-INITIALY)) * ((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*2*ZOOM)),(x+temp_block.positionx) * (((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*2*ZOOM))));
             }
         }
     }
@@ -92,8 +92,9 @@ Toolkit.prototype.print_ghost_to_canvas = function (temp_playfield, temp_block)
 
 Toolkit.prototype.update_next_block_window = function ()
 {
-    var offset_x = (((block_size*zoom)+(block_border*zoom))*(playfield.width+2));
-    var offset_y = (block_size*zoom)+(block_border*zoom);
+	return;
+    var offset_x = (((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*ZOOM))*(playfield.width+2));
+    var offset_y = (BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*ZOOM);
     var temp_block;
     if(blocks.length <= 0)
     {
@@ -108,7 +109,7 @@ Toolkit.prototype.update_next_block_window = function ()
         {
             if(temp_block[y][x])
             {
-                this.draw_block_full(offset_y+(((block_size*zoom)+(block_border*2*zoom))*y),offset_x+(((block_size*zoom)+(block_border*2*zoom))*x));
+                this.draw_block_full(offset_y+(((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*2*ZOOM))*y),offset_x+(((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*2*ZOOM))*x));
             }
         }
     }
@@ -116,18 +117,20 @@ Toolkit.prototype.update_next_block_window = function ()
 
 Toolkit.prototype.update_next_block_window_frame = function (temp_playfield)
 {
-    var offset_x = (((block_size*zoom)+(block_border*zoom))*(temp_playfield.width+2)) - (block_border*zoom);
-    var offset_y = (block_size*zoom)+(block_border*zoom) - (block_border*zoom);
+	return;
+    var offset_x = (((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*ZOOM))*(temp_playfield.width+2)) - (BLOCK_BORDER*ZOOM);
+    var offset_y = (BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*ZOOM) - (BLOCK_BORDER*ZOOM);
 
     this.brush.clearRect(offset_x,offset_y,
-        (((block_size*zoom)+(block_border+zoom))*4)+(block_border*7*zoom),
-        (((block_size*zoom)+(block_border+zoom*2))*4)+(block_border*7*zoom));
+        (((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER+ZOOM))*4)+(BLOCK_BORDER*7*ZOOM),
+        (((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER+ZOOM*2))*4)+(BLOCK_BORDER*7*ZOOM));
 }
 
 Toolkit.prototype.update_hold_block_window = function (temp_playfield,temp_saved)
 {
-    var offset_x = (((block_size*zoom)+(block_border*zoom))*(temp_playfield.width+2));
-    var offset_y = ((block_size*zoom)+(block_border*zoom))*8;
+	return;
+    var offset_x = (((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*ZOOM))*(temp_playfield.width+2));
+    var offset_y = ((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*ZOOM))*8;
 
     for(var y = 0 ; y < temp_saved.size; y++)
     {
@@ -135,7 +138,7 @@ Toolkit.prototype.update_hold_block_window = function (temp_playfield,temp_saved
         {
             if(saved_block.field[y][x])
             {
-                this.draw_block_full(offset_y+(((block_size*zoom)+(block_border*2*zoom))*y),offset_x+(((block_size*zoom)+(block_border*2*zoom))*x));
+                this.draw_block_full(offset_y+(((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*2*ZOOM))*y),offset_x+(((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*2*ZOOM))*x));
             }
         }
     }
@@ -143,12 +146,13 @@ Toolkit.prototype.update_hold_block_window = function (temp_playfield,temp_saved
 
 Toolkit.prototype.update_hold_block_window_frame = function (temp_playfield)
 {
-    var offset_x = (((block_size*zoom)+(block_border*zoom))*(temp_playfield.width+2)) - (block_border*zoom);
-    var offset_y = ((block_size*zoom)+(block_border*zoom))*8 - (block_border*zoom);
+	return;
+    var offset_x = (((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*ZOOM))*(temp_playfield.width+2)) - (BLOCK_BORDER*ZOOM);
+    var offset_y = ((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER*ZOOM))*8 - (BLOCK_BORDER*ZOOM);
 
     this.brush.clearRect(offset_x,offset_y,
-        (((block_size*zoom)+(block_border+zoom))*4)+(block_border*zoom*7),
-        (((block_size*zoom)+(block_border+zoom*2))*4)+(block_border*zoom*7));
+        (((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER+ZOOM))*4)+(BLOCK_BORDER*ZOOM*7),
+        (((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER+ZOOM*2))*4)+(BLOCK_BORDER*ZOOM*7));
 }
 
 Toolkit.prototype.update_line_count = function ()

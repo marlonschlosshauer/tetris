@@ -99,7 +99,7 @@ function locked()
     //TODO: kit, playfield current_block
     save_current_blocks_to_playfield();
     check_playfield_for_completed_line();
-    current_block = generate_block(choose_next_block(),initialy,initialx);
+    current_block = generate_block(choose_next_block(),INITIALY,INITIALX);
     kit.update_next_block_window_frame(playfield);
     kit.update_next_block_window(playfield);
     //Check if game over
@@ -111,7 +111,7 @@ function check_game_over()
 {
     for(var i = 0; i < playfield.width; i++)
     {
-        if(playfield.field[initialy+1][i])
+        if(playfield.field[INITIALY+1][i])
         {
             return true;
         }
@@ -139,7 +139,7 @@ function lower_piece()
 
 function check_playfield_for_completed_line()
 {
-    for(var y = initialy ; y < playfield.height; y++)
+    for(var y = INITIALY ; y < playfield.height; y++)
     {
         if(check_line(playfield,y))
         {
@@ -203,7 +203,7 @@ function reset_game()
 {
     reset_array(playfield.field, playfield.height, playfield.width);
     generate_block_ids();
-    current_block = generate_block(choose_next_block(),initialy,initialx);
+    current_block = generate_block(choose_next_block(),INITIALY,INITIALX);
     saved_block = 0;
     kit.update_next_block_window_frame(playfield);
     kit.update_next_block_window(playfield);
@@ -235,8 +235,8 @@ function update_visuals(temp_playfield, temp_block, temp_toolkit)
 function change_canvas_size(temp_height,temp_width)
 {
     //TODO kit
-    kit.canvas.style.height = visual_height;
-    kit.canvas.style.width = visual_width;
-    kit.canvas.height = visual_height;
-    kit.canvas.width = visual_width;
+    kit.canvas.style.height = VISUAL_HEIGHT;
+    kit.canvas.style.width = VISUAL_WIDTH;
+    kit.canvas.height = VISUAL_HEIGHT;
+    kit.canvas.width = VISUAL_WIDTH;
 }

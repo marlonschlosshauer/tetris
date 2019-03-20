@@ -8,10 +8,10 @@ var blocks = [];
 
 function initialise_game()
 {
-    playfield = new Playfield(field_total_height,field_height,field_width);
+    playfield = new Playfield(FIELD_TOTAL_HEIGHT,FIELD_HEIGHT,FIELD_WIDTH);
     reset_array(playfield.field, playfield.height, playfield.width);
-    kit = initialise_visual_tools(visual_height, visual_width);
-    current_block = generate_block(choose_next_block(),initialy,initialx);
+    kit = initialise_visual_tools(VISUAL_HEIGHT, VISUAL_WIDTH);
+    current_block = generate_block(choose_next_block(),INITIALY,INITIALX);
     update_visuals(playfield, current_block, kit);
     kit.update_next_block_window_frame(playfield);
     kit.update_next_block_window(playfield);

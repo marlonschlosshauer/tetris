@@ -65,14 +65,14 @@ function check_input(e)
     break;
 
     case "[":
-        zoom++;
+        ZOOM++;
 
-        visual_height = block_size * zoom;
-        visual_height += block_border * zoom * 2;
-        visual_height *= field_height;
-        visual_height += block_border*zoom;
+        VISUAL_HEIGHT = BLOCK_SIZE * ZOOM;
+        VISUAL_HEIGHT += BLOCK_BORDER * ZOOM * 2;
+        VISUAL_HEIGHT *= FIELD_HEIGHT;
+        VISUAL_HEIGHT += BLOCK_BORDER*ZOOM;
 
-        visual_width = ((block_size*zoom)+(block_border+zoom)) * (field_width + 10);
+        VISUAL_WIDTH = ((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER+ZOOM)) * (FIELD_WIDTH + 10);
         change_canvas_size(visual_height,visual_width);
 
         kit.brush.clearRect(0,0,visual_width,visual_height);
@@ -87,18 +87,18 @@ function check_input(e)
     break;
 
     case "]":
-        if(zoom > 1)
+        if(ZOOM > 1)
         {
-            zoom--;
+            ZOOM--;
             kit.brush.clearRect(0,0,visual_width,visual_height);
             update_next_block_window();
 
-            visual_height = block_size * zoom;
-            visual_height += block_border * zoom * 2;
-            visual_height *= field_height;
-            visual_height += block_border*zoom;
+            VISUAL_HEIGHT = BLOCK_SIZE * ZOOM;
+            VISUAL_HEIGHT += BLOCK_BORDER * ZOOM * 2;
+            VISUAL_HEIGHT *= FIELD_HEIGHT;
+            VISUAL_HEIGHT += BLOCK_BORDER*ZOOM;
 
-            visual_width = ((block_size*zoom)+(block_border+zoom)) * (field_width + 10);
+            VISUAL_WIDTH = ((BLOCK_SIZE*ZOOM)+(BLOCK_BORDER+ZOOM)) * (FIELD_WIDTH + 10);
 
             change_canvas_size(visual_height,visual_width);
             kit.update_next_block_window();

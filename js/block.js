@@ -162,15 +162,15 @@ Block.prototype.toggle_backup = function ()
         var block_type = choose_next_block();
         var field_size = get_correct_field_size(block_type);
 
-        saved_block = new Block(field_size,initialy,initialx,block_type,false,get_field(block_type, field_size));
+        saved_block = new Block(field_size,INITIALY,INITIALX,block_type,false,get_field(block_type, field_size));
     }
 
     this.size = saved_block.size;
     this.type = saved_block.type;
     this.field = saved_block.field;
     this.blocked = saved_block.blocked;
-    this.positionx = initialx;
-    this.positiony = initialy;
+    this.positionx = INITIALX;
+    this.positiony = INITIALY;
     this.saveable = false;
     saved_block = temp;
 };
