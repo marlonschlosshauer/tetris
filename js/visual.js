@@ -1,19 +1,19 @@
-function Toolkit(temp_canvas, temp_brush, temp_height, temp_width) {
-  this.canvas = temp_canvas;
-  this.brush = temp_brush;
-  this.height = temp_height;
-  this.width = temp_width;
+function Toolkit(canvas, brush) {
+  this.canvas = canvas;
+  this.brush = brush;
 
   // Update pixel height and width of block, border and canvas.
   this.updateBlockSizes();
   this.updateCanvasSizes();
 
-  window.addEventListener("resize", e => {
+  window.addEventListener("resize", () => {
+    this.updateBlockSizes();
+    this.updateCanvasSizes();
     this.draw();
   });
 }
 
-Toolkit.prototype.draw_block_full = function(y, x) {
+Toolkit.prototype.drawFullBlock = function(y, x) {
   this.brush.fillStyle = BLOCK_COLOR_FULL;
   this.brush.fillRect(
     x * (BLOCK_BORDER + BLOCK_SIZE + BLOCK_BORDER) + BLOCK_BORDER * 2,
@@ -32,7 +32,7 @@ Toolkit.prototype.draw_block_full = function(y, x) {
   );
 };
 
-Toolkit.prototype.draw_block_empty = function(y, x) {
+Toolkit.prototype.drawEmptyBlock = function(y, x) {
   this.brush.fillStyle = BLOCK_COLOR_EMPTY;
   this.brush.fillRect(
     x * (BLOCK_BORDER + BLOCK_SIZE + BLOCK_BORDER) + BLOCK_BORDER * 2,
@@ -50,7 +50,7 @@ Toolkit.prototype.draw_block_empty = function(y, x) {
     BLOCK_SIZE
   );
 };
-Toolkit.prototype.draw_block_ghost = function(y, x) {
+Toolkit.prototype.drawGhostBlock = function(y, x) {
   this.brush.fillStyle = BLOCK_COLOR_GHOST;
   this.brush.fillRect(
     x * (BLOCK_BORDER + BLOCK_SIZE + BLOCK_BORDER) + BLOCK_BORDER * 2,
@@ -67,45 +67,38 @@ Toolkit.prototype.draw_block_ghost = function(y, x) {
   );
 };
 
-Toolkit.prototype.print_playfield_to_canvas = function(playfield) {
+Toolkit.prototype.printPlayfield = function(playfield) {
   for (var y = 0; y < playfield.height; y++) {
     for (var x = 0; x < playfield.width; x++) {
       if (playfield.field[y][x] > 0) {
-        this.draw_block_full(y - INITIALY, x);
+        this.drawFullBlock(y - INITIALY, x);
       } else {
-        this.draw_block_empty(y - INITIALY, x);
+        this.drawEmptyBlock(y - INITIALY, x);
       }
     }
   }
 };
 
-Toolkit.prototype.print_currentblock_to_canvas = function(temp_block) {
-  for (var y = 0; y < temp_block.size; y++) {
-    for (var x = 0; x < temp_block.size; x++) {
-      if (temp_block.field[y][x] > 0) {
-        this.draw_block_full(
-          y + temp_block.positiony - INITIALY,
-          x + temp_block.positionx
-        );
+Toolkit.prototype.printCurrentBlock = function(block) {
+  for (var y = 0; y < block.size; y++) {
+    for (var x = 0; x < block.size; x++) {
+      if (block.field[y][x] > 0) {
+        this.drawFullBlock(y + block.positiony - INITIALY, x + block.positionx);
       }
     }
   }
 };
 
-Toolkit.prototype.print_ghost_to_canvas = function(temp_playfield, temp_block) {
-  temp_block = generate_block(
-    temp_block.type,
-    temp_block.positiony,
-    temp_block.positionx
-  );
-  temp_block.drop();
+Toolkit.prototype.printGhost = function(field, block) {
+  block = generateBlock(block.type, block.positiony, block.positionx);
+  block.drop();
 
-  for (var y = 0; y < temp_block.size; y++) {
-    for (var x = 0; x < temp_block.size; x++) {
-      if (temp_block.field[y][x]) {
-        this.draw_block_ghost(
-          y - INITIALY + temp_block.positiony,
-          x + temp_block.positionx
+  for (var y = 0; y < block.size; y++) {
+    for (var x = 0; x < block.size; x++) {
+      if (block.field[y][x]) {
+        this.drawGhostBlock(
+          y - INITIALY + block.positiony,
+          x + block.positionx
         );
       }
     }
@@ -113,16 +106,15 @@ Toolkit.prototype.print_ghost_to_canvas = function(temp_playfield, temp_block) {
 };
 
 Toolkit.prototype.draw = function() {
-  this.updateBlockSizes();
-  this.updateCanvasSizes();
-  this.print_playfield_to_canvas(playfield);
-  this.print_currentblock_to_canvas(current_block);
-  this.print_ghost_to_canvas(playfield, current_block);
+  this.printPlayfield(playfield);
+  this.printGhost(playfield, currentBlock);
+  this.printCurrentBlock(currentBlock);
+  this.updateTitle();
 };
 
 Toolkit.prototype.updateCanvasSizes = function() {
-  var height = this.calcCanvasHeight();
-  var width = this.calcCanvasWidth();
+  const height = this.calcCanvasHeight();
+  const width = this.calcCanvasWidth();
 
   this.canvas.height = height;
   this.canvas.width = width;
@@ -155,6 +147,6 @@ Toolkit.prototype.updateBlockSizes = function() {
   }
 };
 
-Toolkit.prototype.update_line_count = function() {
+Toolkit.prototype.updateTitle = function() {
   document.title = line_count + "";
 };

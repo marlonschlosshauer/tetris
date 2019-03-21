@@ -1,13 +1,14 @@
-function get_field(block_type, field_size) {
+function buildField(type, size) {
   //Generate 2d array
-  var field = [field_size];
-  for (var y = 0; y < field_size; y++) {
-    field[y] = [field_size];
+  var field = [size];
+  for (let y = 0; y < size; y++) {
+    field[y] = [size];
+    for (let x = 0; x < size; x++) {
+      field[y][x] = 0;
+    }
   }
 
-  reset_array(field, field_size, field_size);
-
-  switch (block_type) {
+  switch (type) {
     case 0:
       field[0][0] = 1;
       field[0][1] = 1;
