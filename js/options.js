@@ -1,26 +1,25 @@
-var field_width = 11;
-var field_height = 20;
-var field_total_height = 40;
+var FIELD_WIDTH = 11;
+var FIELD_HEIGHT = 20;
+var FIELD_TOTAL_HEIGHT = 40;
 
-var zoom = 2;
-var block_border = 2;
-var block_size = 16;
+var ZOOM = 2;
+var BLOCK_BORDER = 2;
+var BLOCK_SIZE = 16;
 
-var visual_height = block_size * zoom;
-visual_height += block_border * zoom * 2;
-visual_height *= field_height;
-visual_height += block_border*zoom;
+var VISUAL_HEIGHT = BLOCK_SIZE * ZOOM;
+VISUAL_HEIGHT += BLOCK_BORDER * ZOOM * 2;
+VISUAL_HEIGHT *= FIELD_HEIGHT;
+VISUAL_HEIGHT += BLOCK_BORDER * ZOOM;
 
-var visual_width = ((block_size*zoom)+(block_border+zoom)) * (field_width + 10);
+var VISUAL_WIDTH =
+  (BLOCK_SIZE * ZOOM + (BLOCK_BORDER + ZOOM)) * (FIELD_WIDTH + 10);
 
-var color_block_full = '#bfcd99';
-var color_block_empty = '#000000';
-var color_block_ghost = '#373837';
+var BLOCK_COLOR_FULL = "#bfcd99";
+var BLOCK_COLOR_EMPTY = "#000000";
+var BLOCK_COLOR_GHOST = "#373837";
 
-//O J L S T Z I
-var blocks = [];
-var initialx = 4;
-var initialy = 20;
+//o j l s t z i
+var INITIALX = 4;
+var INITIALY = 20;
 
 var line_count = 0;
-
