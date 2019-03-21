@@ -195,8 +195,8 @@ Toolkit.prototype.draw = function() {
 };
 
 Toolkit.prototype.updateCanvasSizes = function() {
-  var height = FIELD_HEIGHT * (BLOCK_SIZE + 2 * BLOCK_BORDER);
-  var width = FIELD_WIDTH * (BLOCK_SIZE + 2 * BLOCK_BORDER);
+  var height = this.calcCanvasHeight();
+  var width = this.calcCanvasWidth();
 
   this.canvas.height = height;
   this.canvas.width = width;
@@ -204,11 +204,31 @@ Toolkit.prototype.updateCanvasSizes = function() {
   this.canvas.style.width = width;
 };
 
+Toolkit.prototype.calcCanvasWidth = function() {
+  return FIELD_WIDTH * (BLOCK_SIZE + 2 * BLOCK_BORDER);
+};
+
+Toolkit.prototype.calcCanvasHeight = function() {
+  return FIELD_HEIGHT * (BLOCK_SIZE + 2 * BLOCK_BORDER);
+};
+
 Toolkit.prototype.updateBlockSizes = function() {
   BLOCK_SIZE = Math.floor((window.innerHeight * 0.75) / FIELD_HEIGHT);
   BLOCK_BORDER = Math.floor(BLOCK_SIZE / 8);
+  // Do we have enough horizontal space ?
+  if (window.innerWidth < this.calcCanvasWidth()) {
+    BLOCK_SIZE = Math.floor(window.innerWidth / FIELD_HEIGHT);
+    BLOCK_BORDER = Math.floor(BLOCK_SIZE / 8);
+  }
+
+  if (BLOCK_SIZE < 16) {
+    BLOCK_SIZE = 16;
+  }
+  if (BLOCK_BORDER < 2) {
+    BLOCK_BORDER = 2;
+  }
 };
 
 Toolkit.prototype.update_line_count = function() {
-  document.title = "Tetris : [" + line_count + "]";
+  document.title = line_count + "";
 };
