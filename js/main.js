@@ -13,9 +13,10 @@ function initialise_game()
     kit = initialise_visual_tools(VISUAL_HEIGHT, VISUAL_WIDTH);
     current_block = generate_block(choose_next_block(),INITIALY,INITIALX);
     update_visuals(playfield, current_block, kit);
-    kit.update_next_block_window_frame(playfield);
-    kit.update_next_block_window(playfield);
 
+    /* kit.update_next_block_window_frame(playfield);
+	 * kit.update_next_block_window(playfield);
+	 */
     logic_interval = initialise_game_logic();
     set_input_capture(true);
 }

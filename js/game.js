@@ -11,7 +11,6 @@ function initialise_visual_tools(temp_height, temp_width)
 
 function save_current_blocks_to_playfield()
 {
-    //TODO: current_block and playfield
     for(var cany = 0 ; cany < current_block.size; cany++)
     {
         for(var canx = 0 ; canx < current_block.size ; canx++)
