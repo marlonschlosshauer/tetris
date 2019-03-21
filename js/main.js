@@ -6,19 +6,18 @@ var logic_interval;
 var saved_block = 0;
 var blocks = [];
 
-function initialise_game()
-{
-    playfield = new Playfield(FIELD_TOTAL_HEIGHT,FIELD_HEIGHT,FIELD_WIDTH);
-    reset_array(playfield.field, playfield.height, playfield.width);
-    kit = initialise_visual_tools(VISUAL_HEIGHT, VISUAL_WIDTH);
-    current_block = generate_block(choose_next_block(),INITIALY,INITIALX);
-    update_visuals(playfield, current_block, kit);
+function initialise_game() {
+  playfield = new Playfield(FIELD_TOTAL_HEIGHT, FIELD_HEIGHT, FIELD_WIDTH);
+  reset_array(playfield.field, playfield.height, playfield.width);
+  kit = initialise_visual_tools(VISUAL_HEIGHT, VISUAL_WIDTH);
+  current_block = generate_block(choose_next_block(), INITIALY, INITIALX);
+  update_visuals(playfield, current_block, kit);
 
-    /* kit.update_next_block_window_frame(playfield);
-	 * kit.update_next_block_window(playfield);
-	 */
-    logic_interval = initialise_game_logic();
-    set_input_capture(true);
+  /* kit.update_next_block_window_frame(playfield);
+   * kit.update_next_block_window(playfield);
+   */
+  logic_interval = initialise_game_logic();
+  set_input_capture(true);
 }
 
 //TODO: line counter (and timer) change font to hellovetica
