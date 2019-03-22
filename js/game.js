@@ -66,12 +66,14 @@ function generateBlock(type, positiony, positionx) {
 }
 
 function lock() {
+  currentBlock.canMove = false;
   saveBlock();
   handleCompletedLines();
   currentBlock = generateBlock(getNextBlock(), INITIALY, INITIALX);
   //Check if game over
   if (isGameOver()) resetGame();
   kit.draw();
+  currentBlock.canMove = true;
 }
 
 function isGameOver() {
@@ -84,16 +86,18 @@ function isGameOver() {
 }
 
 function lowerCurrentBlock() {
-  //move and check if lock
-  if (currentBlock.atBottom() || currentBlock.blocked) {
-    lock();
-  }
+  if (currentBlock.canMove) {
+    //move and check if lock
+    if (currentBlock.atBottom() || currentBlock.blocked) {
+      lock();
+    }
 
-  if (currentBlock.move(1, 0) == 2) {
-    currentBlock.blocked = true;
-  }
+    if (currentBlock.move(1, 0) == 2) {
+      currentBlock.blocked = true;
+    }
 
-  kit.draw();
+    kit.draw();
+  }
 }
 
 function handleCompletedLines() {

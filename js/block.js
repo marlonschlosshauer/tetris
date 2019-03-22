@@ -5,19 +5,23 @@ function Block(size, y, x, type, field) {
   this.positionx = x;
   this.field = field;
   this.blocked = false;
+  this.canMove = true;
 }
 
 Block.prototype.move = function(y, x) {
-  //We can only move if there is no block in our way
-  let coll = this.collided(y, x);
-  if (coll == 0) {
-    //The actual moving part
-    this.positiony += y;
-    this.positionx += x;
+  let coll = false;
+  if (this.canMove) {
+    //We can only move if there is no block in our way
+    coll = this.collided(y, x);
+    if (coll == 0) {
+      //The actual moving part
+      this.positiony += y;
+      this.positionx += x;
+    }
   }
-
   return coll;
 };
+
 Block.prototype.rotateBlock = function() {
   //Make next blocks
   //Check if anything is out of bounds
