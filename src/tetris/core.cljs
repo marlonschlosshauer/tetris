@@ -5,9 +5,11 @@
 
 ;; -------------------------
 ;; Views
+(defn playfield []
+  [:canvas {:id "field" :width 500 :height 500}])
 
 (defn home-page []
-  [:div [:h2 "Welcome to Reagent"]])
+  [:div [:h2 "hello to Reagent"] (playfield)])
 
 ;; -------------------------
 ;; Initialize app
@@ -17,3 +19,4 @@
 
 (defn ^:export init! []
   (mount-root))
+
