@@ -9,15 +9,22 @@
   (let [canvas (.getElementById js/document "field")]
     {:canvas canvas :context (.getContext canvas "2d")}))
 
+(defn get-style [type]
+  (case type
+    :block {:inner "#bfcd99" :border "#373837"}
+    :ghost {:inner "#373837" :border "#373837"}
+    :clear {:inner "#000000" :border "#000000"}))
+
 (defn draw-block [x y type config]
   ;; Access tools from config
   (let [context (get config :context)
         size (get config :size)
-        border (get config :border)]
+        border (get config :border)
+        colors (get-style type)]
     ;; Set colors
     ;; TODO: Apply color based on type
-    (set! (.-fillStyle context) "#bfcd99")
-    (set! (.-strokeStyle context) "#373837")
+    (set! (.-fillStyle context) (get colors :inner))
+    (set! (.-strokeStyle context) (get colors :border))
     (set! (.-lineWidth context) border)
     ;; Draw block
     (.fillRect
@@ -39,11 +46,13 @@
   (draw-block 2 0 :block (merge {:size (get @app-state-visuals :block-width) :border (get @app-state-visuals :block-border)} (get-tools))))
 
 (comment
+  ;; Remove block
+  (draw-block 2 0 :clear (merge {:size (get @app-state-visuals :block-width) :border (get @app-state-visuals :block-border)} (get-tools))))
+
+(comment
   ;; Update state manually
   (swap! app-state-visuals assoc :block-border 4))
 
 (comment
   ;; Inspect state
   @app-state-visuals)
-
-
