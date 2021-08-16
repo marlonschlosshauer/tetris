@@ -1,7 +1,9 @@
 (ns tetris.core
     (:require
       [reagent.core :as r]
-      [reagent.dom :as d]))
+      [reagent.dom :as d]
+      [tetris.game :as game]
+      [tetris.input :as input]))
 
 ;; -------------------------
 ;; Views
@@ -15,7 +17,9 @@
 ;; Initialize app
 
 (defn mount-root []
-  (d/render [home-page] (.getElementById js/document "app")))
+  (d/render [home-page] (.getElementById js/document "app"))
+  (game/start)
+  (input/setup-inputs))
 
 (defn ^:export init! []
   (mount-root))

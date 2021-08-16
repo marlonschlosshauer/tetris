@@ -1,5 +1,5 @@
 (ns tetris.visual
-  (:require [tetris.game]))
+  (:require [tetris.tetrimoni]))
 
 (defonce app-state-visuals
   (atom {:block-width 32 :block-border 4}))
@@ -52,7 +52,8 @@
   ([tetrimoni] (draw-tetrimoni tetrimoni :block))
   ([tetrimoni type]
    (let [config (merge @app-state-visuals (get-tools))]
-     (for [t (tetris.game/get-tetrimoni tetrimoni)]
+     (for [t (tetris.tetrimoni/get-tetrimoni tetrimoni)]
        (draw-block (get t :x) (get t :y) :block config)))))
+
 (comment
   (draw-tetrimoni :o))

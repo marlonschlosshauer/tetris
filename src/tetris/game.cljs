@@ -1,12 +1,35 @@
 (ns tetris.game
-  (:require [tetris.input :as input]))
+  (:require
+   [clojure.core.async :as async]
+   [tetris.tetrimoni :as tetrimoni]
+   [tetris.visual :as visual]))
 
-(defn get-tetrimoni [tetrimoni]
-  (case tetrimoni
-    :o [{:x 0 :y 0} {:x 0 :y 1} {:x 1 :y 0} {:x 1 :y 1}]
-    :j [{:x 0 :y 2} {:x 1 :y 0} {:x 1 :y 1} {:x 1 :y 2}]
-    :z [{:x 0 :y 2} {:x 0 :y 1} {:x 1 :y 0} {:x 1 :y 1}]
-    :t [{:x 0 :y 1} {:x 1 :y 0} {:x 1 :y 1} {:x 1 :y 2}]
-    :s [{:x 0 :y 2} {:x 1 :y 1} {:x 1 :y 2} {:x 0 :y 3}]
-    :l [{:x 0 :y 0} {:x 1 :y 0} {:x 1 :y 1} {:x 1 :y 2}]
-    :i [{:x 1 :y 0} {:x 1 :y 1} {:x 1 :y 2} {:x 1 :y 3}]))
+;; TODO: Test for x,y
+(defn position-validator
+  [{:keys [x y]}]
+  (and
+   (>= x 0)
+   (<= x 11)
+   (>= y 0)
+   (<= y 20)))
+
+(defonce app-state-player
+  (atom {:position {:x 0 :y 0}}))
+
+(defonce update-chan (async/chan))
+
+(defn move [direction]
+  (async/go
+    (async/>! update-chan direction)))
+
+(defn apply-move [move]
+  (let [pos (get @app-state-player :position)]
+    (swap! app-state-player assoc-in [:position]
+           {:x (+ (get move :x) (get pos :x))
+             :y (+ (get move :y) (get pos :y))})))
+
+(defn start []
+  (async/go
+    (while true
+      ;; TODO: Fix being called 9x,5x times(?)
+      (apply-move (async/<! update-chan)))))
