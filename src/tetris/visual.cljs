@@ -1,6 +1,6 @@
-(ns tetris.visual)
+(ns tetris.visual
+  (:require [tetris.game]))
 
-;; TODO: What if I need this atom in other ns?
 (defonce app-state-visuals
   (atom {:block-width 32 :block-border 4}))
 
@@ -18,8 +18,8 @@
 (defn draw-block [x y type config]
   ;; Access tools from config
   (let [context (get config :context)
-        size (get config :size)
-        border (get config :border)
+        size (get config :block-width)
+        border (get config :block-border)
         colors (get-style type)]
     ;; Set colors
     ;; TODO: Apply color based on type
@@ -38,21 +38,21 @@
      (+ (* x (+ (* 2 border) size)) border)
      (+ (* y (+ (* 2 border) size)) border)
      size 
-     size)
-    ))
+     size)))
 
 (comment
   ;; Draw a single block
-  (draw-block 2 0 :block (merge {:size (get @app-state-visuals :block-width) :border (get @app-state-visuals :block-border)} (get-tools))))
+  (draw-block 2 0 :block (merge @app-state-visuals (get-tools))))
 
 (comment
   ;; Remove block
-  (draw-block 2 0 :clear (merge {:size (get @app-state-visuals :block-width) :border (get @app-state-visuals :block-border)} (get-tools))))
+  (draw-block 2 0 :clear (merge @app-state-visuals (get-tools))))
 
+(defn draw-tetrimoni
+  ([tetrimoni] (draw-tetrimoni tetrimoni :block))
+  ([tetrimoni type]
+   (let [config (merge @app-state-visuals (get-tools))]
+     (for [t (tetris.game/get-tetrimoni tetrimoni)]
+       (draw-block (get t :x) (get t :y) :block config)))))
 (comment
-  ;; Update state manually
-  (swap! app-state-visuals assoc :block-border 4))
-
-(comment
-  ;; Inspect state
-  @app-state-visuals)
+  (draw-tetrimoni :o))
